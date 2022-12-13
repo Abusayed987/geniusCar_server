@@ -3,7 +3,6 @@ const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config()
 
-
 const app = express()
 const port = process.env.PORT || 4000;
 
@@ -11,18 +10,21 @@ const port = process.env.PORT || 4000;
 app.use(cors())
 app.use(express.json())
 
-// user: geniusCarDbUser
-// pass: 
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dptn3ue.mongodb.net/?retryWrites=true&w=majority`;
-// console.log(uri);
+
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-    const collection = client.db("test").collection("devices");
-    // perform actions on the collection object
-    client.close();
-});
+
+async function run() {
+    try {
+        const serviceCollection = client.db('geniusCar').collection('services')
+    }
+    finally {
+
+    }
+}
+run().catch(err => console.err(err))
 
 
 app.get('/', (req, res) => {
