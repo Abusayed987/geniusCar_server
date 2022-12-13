@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId, ObjectID } = require('mongodb');
 require('dotenv').config()
 
 const app = express()
@@ -40,10 +40,7 @@ async function run() {
         //orders API for get specific  data from mongoDb !
         // v6
         app.get('/orders', async (req, res) => {
-            //url link ta server display side er
-
-            let query = {};
-
+            let query = {}
             if (req.query.email) {
                 query = {
                     email: req.query.email
@@ -60,6 +57,28 @@ async function run() {
             //url link ta Client side er
             const order = req.body;
             const result = await orderCollection.insertOne(order)
+            res.send(result)
+        })
+
+        // update a user 
+        app.patch('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body.status
+            const query = { _id: ObjectId(id) }
+            const updatedDoc = {
+                $set: {
+                    status: status
+                }
+            }
+            const result = await orderCollection.updateOne(query, updatedDoc)
+            res.send(result)
+        })
+
+        // delete a single(dynamic) data
+        app.delete('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await orderCollection.deleteOne(query)
             res.send(result)
         })
 
